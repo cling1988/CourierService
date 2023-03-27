@@ -1,0 +1,5 @@
+{
+  "OFR001": {"discount": 10, "distance_min": 0, "distance_max": 200, "weight_min": 70, "weight_max": 200},
+  "OFR002": {"discount": 7, "distance_min": 50, "distance_max": 150, "weight_min": 100, "weight_max": 250},
+  "OFR003": {"discount": 5, "distance_min": 50, "distance_max": 250, "weight_min": 10, "weight_max": 150}
+}
