@@ -24,6 +24,7 @@ class Package:
         self.promo_code = promo_code
         self.delivery_hour = decimal_truncate(self.distance / max_speed_hour, 2)
         self.estimate_delivery_hour = None
+        self.is_valid = True
 
     def __eq__(self, other):
         return ((self.pkg_id.lower(), self.weight, self.distance, self.promo_code.upper()) ==
@@ -65,6 +66,7 @@ class PackagesShipment:
         self.min_distance = min(self.packages, key=attrgetter('distance')).distance
         self.max_distance = max(self.packages, key=attrgetter('distance')).distance
         self.max_delivery_hour = max(self.packages, key=attrgetter('delivery_hour')).delivery_hour
+        self.is_valid = True
 
     def __eq__(self, other):
         return self.packages == other.packages
@@ -76,7 +78,11 @@ class PackagesShipment:
         :param other: PackagesShipment object.
         :return: Return boolean
         """
-        if self.total_weight != other.total_weight:
+        size_package = len(self.packages)
+        size_other_package = len(other.packages)
+        if size_package != size_other_package:
+            return size_package < size_other_package
+        elif self.total_weight != other.total_weight:
             return self.total_weight < other.total_weight
         else:
             return self.max_distance > other.max_distance
@@ -90,8 +96,14 @@ class PackagesShipment:
         :param packages: (List) List of object Packages
         :return: boolean True is existed.
         """
-        if not packages or len(packages) <= 0:
+        if packages is None:
             return False
+        if isinstance(packages, list):
+            if len(packages) <= 0:
+                return False
+        elif isinstance(packages, Package):
+            packages = [packages]
+
         for pkg in self.packages:
             if pkg in packages:
                 return True

@@ -1,3 +1,6 @@
+from src.tool import check_positive
+
+
 def input_float(text):
     """
     Standard input to check is float.
@@ -7,7 +10,7 @@ def input_float(text):
     result_float = None
     while True:
         try:
-            result_float = float(input(text))
+            result_float = check_positive(float(input(text)))
         except ValueError:
             print("Please enter valid input")
             continue
@@ -25,7 +28,9 @@ def input_int(text):
     result_int = None
     while True:
         try:
-            result_int = int(input(text))
+            result_int = check_positive(int(input(text)))
+            if result_int < 0:
+                raise ValueError("Not accept negative value")
         except ValueError:
             print("Please enter valid input")
             continue
@@ -47,8 +52,8 @@ def input_package():
                 print("Please enter valid input [pkg_id pkg_weight_in_kg distance_in_km offer_code]")
                 continue
             pkg_id = str(results[0])
-            weight_kg = float(results[1])
-            distance_km = float(results[2])
+            weight_kg = check_positive(float(results[1]))
+            distance_km = check_positive(float(results[2]))
             offer_code = str(results[3]).upper() if len(results) > 3 else None
             results = (pkg_id, weight_kg, distance_km, offer_code)
         except ValueError:
@@ -71,9 +76,10 @@ def input_delivery():
             if len(results) < 3:
                 print("Please enter valid input [no_of_vehicles max_speed max_carriable_weigh]")
                 continue
-            no_of_vehicles = int(results[0])
-            max_speed = int(results[1])
-            max_carriable_weigh = int(results[2])
+            no_of_vehicles = check_positive(int(results[0]))
+            max_speed = check_positive(int(results[1]))
+            max_carriable_weigh = check_positive(int(results[2]))
+
             results = (no_of_vehicles, max_speed, max_carriable_weigh)
         except ValueError:
             print("Please enter valid input [no_of_vehicles max_speed max_carriable_weigh]")
@@ -96,7 +102,7 @@ def input_argument_float(index, arg_list):
     if len(arg_list) > index:
         result = arg_list[index]
         try:
-            result = float(result)
+            result = check_positive(float(result))
         except ValueError:
             result = None
     return result
@@ -115,7 +121,7 @@ def input_argument_int(index, arg_list):
     if len(arg_list) > index:
         result = arg_list[index]
         try:
-            result = int(result)
+            result = check_positive(int(result))
         except ValueError:
             result = None
     return result
@@ -143,7 +149,10 @@ def input_argument_package(arg_list, total_packages):
         for ind, typ in index_of_pacakge.items():
             ind += x * 4
             try:
-                tmp_package.append(typ(arg_list[ind]))
+                if typ == float:
+                    tmp_package.append(check_positive(typ(arg_list[ind])))
+                else:
+                    tmp_package.append(typ(arg_list[ind]))
             except ValueError:
                 return None
         packages_result.append(tuple(tmp_package))

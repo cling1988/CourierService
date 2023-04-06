@@ -10,7 +10,7 @@ def delivery_cost(base_cost, weight_kg, distance_km) -> float:
     :param distance_km:(float) A 1 decimal float
     :return:total_delivery_cost(float): 2 decimal float
     """
-    if base_cost < 0 or weight_kg < 0 or distance_km < 0:
+    if base_cost is None or weight_kg is None or distance_km is None or base_cost < 0 or weight_kg < 0 or distance_km < 0:
         raise TypeError("Input cannot less than 0")
 
     # Round to valid decimal
@@ -69,7 +69,7 @@ def discount_cost(total_cost, discount):
     :param discount:(int) Discount percent from 0 to 100
     :return: total_discount_cost(float)
     """
-    if total_cost < 0 or discount < 0:
+    if total_cost is None or discount is None or total_cost < 0 or discount < 0:
         raise TypeError("Input cannot less than 0")
     if discount > 100:
         raise TypeError("Discount cannot more than 100")
